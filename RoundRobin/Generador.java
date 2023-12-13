@@ -9,24 +9,24 @@ import java.util.concurrent.Semaphore;
 public class Generador extends Thread {
     Random rand = new Random();
     Queue<Proceso> waitQueue;
-    Semaphore mutex;
+    Semaphore mutWait;
 
-    public Generador(Queue<Proceso> waitQueue, Semaphore mutex) {
+    public Generador(Queue<Proceso> waitQueue, Semaphore mutWait) {
         this.waitQueue = waitQueue;
-        this.mutex = mutex;
+        this.mutWait = mutWait;
     }
 
     public void generar() {
         try {
-            mutex.acquire();
+            mutWait.acquire();
 
-            int time = rand.nextInt(100 - 5) + 5;
-            int size = rand.nextInt(100 - 10) + 10;
+            int time = rand.nextInt(2150 - 500) + 50;
+            int size = rand.nextInt(130 - 50) + 50;
 
             Proceso n = new Proceso(time, size);
             waitQueue.add(n);
             
-            mutex.release();
+            mutWait.release();
         }
         catch (Exception e) {
             System.err.println("Error al generar proceso");
@@ -35,15 +35,18 @@ public class Generador extends Thread {
 
     @Override
     public void run() {
-        Random rand = new Random();
+        int s = rand.nextInt(2100 - 400) + 400;
         
         while(true) {
             try {
-                sleep(300);
+                sleep(s);
             } catch (Exception e) {
                 System.err.println("error en run Generador");
             }
-            generar();
+
+            if (waitQueue.size() < 15) {
+                generar();
+            }
         }
     }
 }

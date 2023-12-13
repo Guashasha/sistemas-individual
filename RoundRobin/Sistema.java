@@ -1,41 +1,32 @@
 package RoundRobin;
 
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.Queue;
 import java.util.LinkedList;
-import java.util.Random;
 import java.util.concurrent.Semaphore;
 
 // Implementación de Round Robin
 public class Sistema {
-    private int memoriaMax = 1000;
-    private int memoriaAct = 1000;
+    public static final int MEMORY_MAX = 1000;
+    public static final int QUANTUM = 10;
+
+    private static AtomicInteger memoryCurr = new AtomicInteger(0);
 
     public static void main(String[] args) {
-        // Cola de procesos que están listos para ejecutarse
+        Queue<Proceso> waitQueue = new LinkedList<Proceso>();
         Queue<Proceso> readyQueue = new LinkedList<Proceso>();
 
-        // Cola de procesos que están en espera
-        // Si la memoria está llena
-        Queue<Proceso> waitQueue = new LinkedList<Proceso>();
+        Semaphore mutWait = new Semaphore(1);
+        Semaphore mutReady = new Semaphore(1);
+        Semaphore mutMemory = new Semaphore(1);
 
-        Semaphore mutex = new Semaphore(1);
-        Generador gen = new Generador(waitQueue, mutex);
+        Generador gen = new Generador(waitQueue, mutWait);
+        Administrador admin = new Administrador(mutWait, waitQueue, mutReady, readyQueue, mutMemory, memoryCurr, MEMORY_MAX);
+        Ejecutador ejec = new Ejecutador(mutReady, readyQueue, mutMemory, memoryCurr, QUANTUM);
 
         gen.start();
-
-        while(true) {
-            try {
-                mutex.acquire();
-
-                if(waitQueue.peek() != null)
-                    System.out.println(waitQueue.poll());
-
-                mutex.release();
-            }
-            catch (Exception e) {
-                System.err.println("error en main: " + e);
-            }
-        }
+        admin.start();
+        ejec.start();
     }
 }
 

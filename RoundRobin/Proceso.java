@@ -9,22 +9,25 @@ public class Proceso extends Thread {
         this.size = tamano;
     }
 
-    public int getTamano() {
+    public int getSize() {
         return size;
     }
 
-    public int getTiempo() {
+    public int getTime() {
+        return time;
+    }
+
+    public void setTime(int time) {
+        this.time = time;
+    }
+    
+    public int elapse(int ms) {
+        this.time = time - ms;
         return time;
     }
 
     @Override
     public void run() {
         System.out.println("hola hilo");
-        try {
-            sleep(100);
-        } 
-        catch (Exception e) {
-            System.err.println("Error en Proceso");
-        }
     }
 }
