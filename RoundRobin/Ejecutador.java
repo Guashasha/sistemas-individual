@@ -11,13 +11,15 @@ public class Ejecutador extends Thread {
     private Semaphore mutMemory;
     private AtomicInteger memoryCurr;
     private int quantum;
+    private Ventana ventana;
 
-    public Ejecutador(Semaphore mutReady, Queue<Proceso> readys, Semaphore mutMemory, AtomicInteger memory, int quantum) {
+    public Ejecutador(Semaphore mutReady, Queue<Proceso> readys, Semaphore mutMemory, AtomicInteger memory, int quantum, Ventana ventana) {
         this.mutReady = mutReady;
         this.readyQueue = readys;
         this.mutMemory = mutMemory;
         this.memoryCurr = memory;
         this.quantum = quantum;
+        this.ventana = ventana;
     }
 
     @Override
@@ -35,6 +37,7 @@ public class Ejecutador extends Thread {
                     sleep(quantum);
 
                     if (proc.getTime() < 1) {
+                        ventana.QuitarBloque();
                         mutReady.acquire();
                         readyQueue.poll();
                         mutReady.release();
@@ -44,13 +47,14 @@ public class Ejecutador extends Thread {
                         mutMemory.release();
                     }
                     else {
+                        ventana.RefrescarBloque();
                         readyQueue.offer(readyQueue.poll());
                     }
 
                     proc = null;
                 }
             } catch (Exception e) {
-                System.out.println("Error al dormir en ejecutador");
+                System.out.println("Error: " + e.getMessage());
             }
         }
     }

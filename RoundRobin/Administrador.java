@@ -10,12 +10,13 @@ public class Administrador extends Thread {
     private Queue<Proceso> readyQueue;
     private Semaphore mutWait;
     private Semaphore mutReady;
+    private Ventana ventana;
 
     private Semaphore mutMemory;
     private int memoryMax;
     private AtomicInteger memoryCurr;
 
-    public Administrador(Semaphore mutWait, Queue<Proceso> waitQueue, Semaphore mutReady, Queue<Proceso> readyQueue, Semaphore mutMemory, AtomicInteger memoryCurr, int memoryMax) {
+    public Administrador(Semaphore mutWait, Queue<Proceso> waitQueue, Semaphore mutReady, Queue<Proceso> readyQueue, Semaphore mutMemory, AtomicInteger memoryCurr, int memoryMax, Ventana ventana) {
         this.mutWait=mutWait;
         this.waitQueue=waitQueue;
         this.mutReady=mutReady;
@@ -23,6 +24,7 @@ public class Administrador extends Thread {
         this.mutMemory=mutMemory;
         this.memoryMax=memoryMax;
         this.memoryCurr=memoryCurr;
+        this.ventana = ventana;
     }
 
     public void run() {
@@ -40,6 +42,7 @@ public class Administrador extends Thread {
                         mutMemory.acquire();
 
                         memoryCurr.addAndGet(p.getSize());
+                        ventana.InsertarBloque(p.getSize());
                         System.out.println("memoria: " + memoryCurr.get());
 
                         mutMemory.release();

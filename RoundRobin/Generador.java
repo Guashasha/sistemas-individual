@@ -7,13 +7,15 @@ import java.util.concurrent.Semaphore;
 
 // Generador de procesos en intervalos aleatorios
 public class Generador extends Thread {
-    Random rand = new Random();
-    Queue<Proceso> waitQueue;
-    Semaphore mutWait;
+    private Random rand = new Random();
+    private Queue<Proceso> waitQueue;
+    private Semaphore mutWait;
+    private Ventana ventana;
 
-    public Generador(Queue<Proceso> waitQueue, Semaphore mutWait) {
+    public Generador(Queue<Proceso> waitQueue, Semaphore mutWait, Ventana ventana) {
         this.waitQueue = waitQueue;
         this.mutWait = mutWait;
+        this.ventana = ventana;
     }
 
     public void generar() {
