@@ -1,6 +1,6 @@
-## Implementación de round robin en Java
+# Implementación de round robin en Java
 
-# Clases
+## Clases
 Existen 5 clases principales en el proyecto:
 - Proceso: La definición de cada proceso que crea el Generador, se usa para crear hilos con el tamaño y tiempo que se indiquen.
 - Sistema: La clase principal, en la cual está contenido el main. En ésta se inician los hilos principales y se definen todos los datos, simula tener los recursos de la computadora.
@@ -8,7 +8,7 @@ Existen 5 clases principales en el proyecto:
 - Administrador: Pasa los hilos de la cola de espera a la cola de listos si hay espacio en memoria para ello.
 - Ejecutador: Ejecuta los hilos que se encuentran en la cola de espera durante un quantum de tiempo, para despues (en el caso de que aún no acaben) regresarlos al final de la cola de listos.
 
-# Funcionamiento
+## Funcionamiento
 El metodo main contenido en la clase Sistema define las colas de listos y en espera, usando la estructura de una lista ligada e implementando la interfaz de Queue, también define el tamaño de la memoria y la cantidad de memoria que se está utilizando, además de crear los hilos Generador, Administrador y Ejecutador, pasandoles como atributos (recursos compartidos) los recursos que necesitan para realizar sus operaciones.
 
 Dentro de la clase Generador se crean hilos (procesos simulados) con valores de tiempo y tamaño aleatorios cada cierto tiempo también aleatorio, y al crearlos los agrega a la cola de espera.
