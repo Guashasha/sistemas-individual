@@ -17,7 +17,7 @@ Despues de generar los hilos, en la clase Administrador se revisa si la memoria 
 
 Despues de agregar los hilos a la cola, la clase Ejecutador se encarga de ejecutar durante el tiempo especificado(quantum) el primer proceso, ésto mediante una llamada a sleep(quantum) seguida de restar el quantum al tiempo del hilo, posteriormente se revisa si el hilo aún tiene tiempo, si tiene tiempo entonces se saca de la cola de listos y se mete en la misma, quedando como el ultimo proceso, si ya no tiene tiempo solo se saca de la cola y se libera la memoria que ocupaba.
 
-# Interfaz grafica
+## Interfaz grafica
 La clase Ventana se encarga de la interfaz grafica del proyecto, se instancia en la clase Sistema y es pasada a todas las otras clases para modificar la lista de procesos que se encuentran listos para ejecutarse, al agregarse un hilo a la cola de listos, también se agrega un bloque a la cola de bloques, y al terminar el quantum de tiempo de ejecución, si el tiempo terminó entonces se quita el bloque de la pantalla y de la cola de bloques, si no ha terminado se saca el bloque de la cola y se mete al final.
 
 En cada cambio de bloque, ya sea que un proceso termina o que se va al final de la cola, se cambia el color del bloque que esté en la cabeza de la lista, el cual representa el proceso que está ejecutandose actualmente.
